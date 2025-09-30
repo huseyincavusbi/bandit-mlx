@@ -18,6 +18,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
+    - name: Print hardware info
+      run: |
+        echo "=== Hardware Information ==="
+        sysctl -n machdep.cpu.brand_string
+        system_profiler SPHardwareDataType | grep "Chip\|Model Name\|Total Number of Cores"
+        echo "==========================="
+    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
@@ -42,9 +49,8 @@ jobs:
         import mlx.core as mx
         from bandit_sim import BanditEnvironment, ThompsonSampling, BanditSimulation, SimulationConfig
         
-        env = BanditEnvironment(
-            true_rewards=mx.array([0.1, 0.5, 0.3, 0.7, 0.2]),
-            seed=42
+        env = BanditEnvironment.from_parameters(
+            bernoulli_probs=[0.1, 0.5, 0.3, 0.7, 0.2]
         )
         
         algorithm = ThompsonSampling(num_arms=5, alpha=1.0, beta=1.0, seed=42)
