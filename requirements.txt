@@ -1,0 +1,10 @@
+# Multi-Armed Bandit Simulator - Dependencies
+
+# Core ML Framework
+mlx>=0.20.0
+
+# Visualization
+matplotlib>=3.8.0
+
+# Testing
+pytest>=8.0.0
