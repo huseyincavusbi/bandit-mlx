@@ -5,11 +5,13 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: macos-latest
     strategy:
+      fail-fast: false
       matrix:
         python-version: ['3.11', '3.12', '3.x']
     
@@ -36,7 +38,7 @@ jobs:
       env:
         PYTHONPATH: ${{ github.workspace }}/src
       run: |
-        python -c '
+        python << 'EOF'
         import mlx.core as mx
         from bandit_sim import BanditEnvironment, ThompsonSampling, run_simulation
         
@@ -48,10 +50,10 @@ jobs:
         algorithm = ThompsonSampling(num_arms=5, alpha=1.0, beta=1.0, seed=42)
         metrics = run_simulation(env, algorithm, num_steps=100)
         
-        print(f"Total reward: {float(metrics[\"cumulative_reward\"][-1]):.2f}")
-        print(f"Total regret: {float(metrics[\"cumulative_regret\"][-1]):.2f}")
+        print(f"Total reward: {float(metrics['cumulative_reward'][-1]):.2f}")
+        print(f"Total regret: {float(metrics['cumulative_regret'][-1]):.2f}")
         print("Basic example test passed!")
-        '
+        EOF
     
     - name: Run demo script
       env:
