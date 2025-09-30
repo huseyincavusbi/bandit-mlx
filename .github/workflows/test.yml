@@ -53,14 +53,18 @@ jobs:
             bernoulli_probs=[0.1, 0.5, 0.3, 0.7, 0.2]
         )
         
-        algorithm = ThompsonSampling(num_arms=5, alpha=1.0, beta=1.0, seed=42)
+        algorithm = ThompsonSampling(num_arms=5, alpha=1.0, beta=1.0)
         
-        config = SimulationConfig(num_steps=100)
+        config = SimulationConfig(horizon=100, runs=10)
         simulation = BanditSimulation(env, algorithm, config)
         results = simulation.run(mx.random.key(42))
         
-        print(f"Total reward: {float(results.metrics['cumulative_reward'][-1]):.2f}")
-        print(f"Total regret: {float(results.metrics['cumulative_regret'][-1]):.2f}")
+        # Average across runs for final cumulative values
+        avg_reward = float(mx.mean(results.cumulative_rewards[:, -1]))
+        avg_regret = float(mx.mean(results.cumulative_regret[:, -1]))
+        
+        print(f"Average total reward (across {config.runs} runs): {avg_reward:.2f}")
+        print(f"Average total regret (across {config.runs} runs): {avg_regret:.2f}")
         print("Basic example test passed!")
         EOF
     
