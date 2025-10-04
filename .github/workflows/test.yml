@@ -74,6 +74,14 @@ jobs:
       run: |
         python demo.py
     
+    - name: Test notebooks
+      env:
+        PYTHONPATH: ${{ github.workspace }}/src
+      run: |
+        pip install jupyter
+        jupyter nbconvert --execute --to notebook --inplace notebooks/introduction.ipynb
+        jupyter nbconvert --execute --to notebook --inplace notebooks/clinical_trial_example.ipynb
+    
     - name: Set artifact name
       id: artifact
       run: |
@@ -89,4 +97,4 @@ jobs:
         path: |
           easy_scenario.png
           hard_scenario.png
-        retention-days: 7
+        retention-days: 14

@@ -94,6 +94,9 @@ bandit/
 │   │   └── runner.py
 │   ├── metrics.py           # Metric computation
 │   └── visualization.py     # Plotting functions
+├── notebooks/               # Introductory Jupyter notebooks
+│   ├── introduction.ipynb   # Basic bandit concepts and algorithms
+│   └── clinical_trial_example.ipynb  # Real-world clinical trial application
 ├── tests/                   # Test suite
 │   ├── __init__.py
 │   ├── conftest.py          
